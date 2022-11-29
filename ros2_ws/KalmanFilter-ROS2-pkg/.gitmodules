@@ -1,0 +1,3 @@
+[submodule "src/BRAM-uio-driver"]
+	path = src/BRAM-uio-driver
+	url = git@github.com:DIII-SDU-Group/BRAM-uio-driver.git
