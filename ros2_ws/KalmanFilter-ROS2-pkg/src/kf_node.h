@@ -47,7 +47,8 @@ private:
   queue<acc_t> control_input_queue;
 
   // Add here BRAM and xkalmanfilterkernel objects
-
+  pos_t kalmanestimator( pos_t pos_meas, acc_t acc_meas);
+  pos_t out_pos_est;
 };
 
 int main(int argc, char ** argv);

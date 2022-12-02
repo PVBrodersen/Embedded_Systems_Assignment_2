@@ -4,6 +4,8 @@ KFNode::KFNode(const std::string & node_name, const std::string & node_namespace
 
   // Custom code here to initialize BRAM and xkalmanfilterkernel
   // ...
+  bram_uio::init();
+  xkalmanfilterkernel::init();
 
   // Initialize subscribers
   pos_meas_sub_ = this->create_subscription<std_msgs::msg::Float32MultiArray>(
@@ -34,8 +36,20 @@ void KFNode::pos_meas_callback(const std_msgs::msg::Float32MultiArray::SharedPtr
   pos_meas.z = msg->data[2];
   pos_meas_queue.push(pos_meas);
 
+  
+
   // Custom code here to possibly call Kalman filter if both queues are not empty
   // ...
+  if(!pos_meas_queue.empty() && !control_input_queue.empty()){
+    
+    kalmanestimator(pos_meas_queue.front(), control_input_queue.front())
+
+    pos_meas_queue.pop_front();
+    control_input_queue.pop_front();    
+
+    //Publish pos est 
+    KFNode::publish_pos_est(out_pos_est);
+  }
 
 }
 
@@ -47,10 +61,41 @@ void KFNode::control_input_callback(const std_msgs::msg::Float32MultiArray::Shar
   control_input_queue.push(control_input);
 
   // Custom code here to possibly call Kalman filter if both queues are not empty
-  // ...
+  if(!pos_meas_queue.empty() && !control_input_queue.empty()){
+    
+    kalmanestimator(pos_meas_queue.front(), control_input_queue.front())
+
+    pos_meas_queue.pop_front();
+    control_input_queue.pop_front();    
+
+    //Publish pos est 
+    KFNode::publish_pos_est(out_pos_est);
+  }
 
 }
 
+pos_t kalmanestimator ( pos_t pos_meas, acc_t acc_meas){
+    // Data to array for kalmankernel
+    float posctrl_input [6];
+    posctrl_input[0] = pos_meas.x;
+    posctrl_input[1] = pos_meas.y;
+    posctrl_input[2] = pos_meas.z;
+    posctrl_input[3] = acc_meas.ax;
+    posctrl_input[4] = acc_meas.ay;
+    posctrl_input[5] = acc_meas.az;
+
+    //Init 
+    float temp_data [6];
+
+    //Run vitis function
+    temp_data = kalmanfilterkernel(posctrl_input)
+
+    //Parse relevant pos data to out_pos_est
+    out_pos_est.x = temp_data[0];
+    out_pos_est.y = temp_data[1];
+    out_pos_est.z = temp_data[2];
+    
+}
 void KFNode::publish_pos_est(pos_t pos_est) {
   geometry_msgs::msg::PoseStamped pos_est_msg;
   pos_est_msg.header.stamp = this->get_clock()->now();
