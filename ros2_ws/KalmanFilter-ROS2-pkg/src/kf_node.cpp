@@ -68,7 +68,7 @@ void KFNode::control_input_callback(const std_msgs::msg::Float32MultiArray::Shar
 
     // Publish pos est
     KFNode::publish_pos_est(kalmanestimator(pos_meas_queue.front(), control_input_queue()));
-
+S
     // Pop queues to allow for new data
     pos_meas_queue.pop_front();
     control_input_queue.pop_front();
@@ -82,21 +82,21 @@ pos_t kalmanestimator(pos_t pos_meas, acc_t acc_meas)
 
   // Data to bram
 
-  bram0[0] = pos_meas.x;
-  bram0[1] = pos_meas.y;
-  bram0[2] = pos_meas.z;
-  bram0[3] = acc_meas.ax;
-  bram0[4] = acc_meas.ay;
-  bram0[5] = acc_meas.az;
+  bram0[0] = *((uint32_t*)(&pos_meas.x));
+  bram0[1] = *((uint32_t*)(&pos_meas.y));
+  bram0[2] = *((uint32_t*)(&pos_meas.z));
+  bram0[3] = *((uint32_t*)(&acc_meas.ax));
+  bram0[4] = *((uint32_t*)(&acc_meas.ay));
+  bram0[5] = *((uint32_t*)(&acc_meas.az));
 
   // kalman estimation
   KalmanFilter::kalman_estimator();
 
   // Parse relevant pos data to out_pos_est
   pos_t out_pos_est;
-  out_pos_est.x = bram1[0];
-  out_pos_est.y = bram1[1];
-  out_pos_est.z = bram1[2];
+  out_pos_est.x = *((float*)(&bram1[0]));
+  out_pos_est.y = *(float*)(&bram1[1]);
+  out_pos_est.z = *(float*)(&bram1[2]);
 
   return out_pos_est;
 }
