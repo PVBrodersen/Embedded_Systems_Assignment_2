@@ -1,0 +1,79 @@
+09:56:16 INFO  : Launching XSCT server: xsct -n  -interactive /home/philip/Embedded_programming/assignment_2/Embedded_Systems_Assignment_2/hardware_files/temp_xsdb_launch_script.tcl
+09:56:16 INFO  : Registering command handlers for Vitis TCF services
+09:56:25 ERROR : (XSDB Server)package require hsi FAILED:
+invalid command name "hsi::create_dt_node"
+    while executing
+"hsi::create_dt_node -help"
+    (in namespace eval "::hsi::help" script line 6)
+    invoked from within
+"namespace eval ::hsi::help {
+    variable version 0.1
+
+    ::xsdb::setcmdmeta {hsi create_dt_node} categories {hsi}
+    ::xsdb::setcmdmeta {hsi create..."
+    (file "/tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl" line 25)
+    invoked from within
+"source /tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl"
+    ("package ifneeded hsi::help 0.1" script)
+09:56:26 INFO  : Platform repository initialization has completed.
+09:59:16 ERROR : Timed out. 180 seconds have elapsed while waiting for XSCT server to launch.
+09:59:16 INFO  : Launching XSCT server: xsct -n  -interactive /home/philip/Embedded_programming/assignment_2/Embedded_Systems_Assignment_2/hardware_files/temp_xsdb_launch_script.tcl
+09:59:16 ERROR : Failed to call init_repo
+Reason: xsct server communication channel is not established.
+09:59:16 ERROR : Exception raised in executing the command =Failed to call init_repo
+Reason: xsct server communication channel is not established. 
+09:59:19 ERROR : (XSDB Server)package require hsi FAILED:
+invalid command name "hsi::create_dt_node"
+    while executing
+"hsi::create_dt_node -help"
+    (in namespace eval "::hsi::help" script line 6)
+    invoked from within
+"namespace eval ::hsi::help {
+    variable version 0.1
+
+    ::xsdb::setcmdmeta {hsi create_dt_node} categories {hsi}
+    ::xsdb::setcmdmeta {hsi create..."
+    (file "/tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl" line 25)
+    invoked from within
+"source /tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl"
+    ("package ifneeded hsi::help 0.1" script)
+10:02:16 ERROR : Timed out. 180 seconds have elapsed while waiting for XSCT server to launch.
+10:02:16 ERROR : xsct server communication channel is not established.
+10:02:16 INFO  : Launching XSCT server: xsct -n  -interactive /home/philip/Embedded_programming/assignment_2/Embedded_Systems_Assignment_2/hardware_files/temp_xsdb_launch_script.tcl
+10:02:19 ERROR : (XSDB Server)package require hsi FAILED:
+invalid command name "hsi::create_dt_node"
+    while executing
+"hsi::create_dt_node -help"
+    (in namespace eval "::hsi::help" script line 6)
+    invoked from within
+"namespace eval ::hsi::help {
+    variable version 0.1
+
+    ::xsdb::setcmdmeta {hsi create_dt_node} categories {hsi}
+    ::xsdb::setcmdmeta {hsi create..."
+    (file "/tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl" line 25)
+    invoked from within
+"source /tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl"
+    ("package ifneeded hsi::help 0.1" script)
+10:05:16 ERROR : Timed out. 180 seconds have elapsed while waiting for XSCT server to launch.
+10:05:16 INFO  : Launching XSCT server: xsct -n  -interactive /home/philip/Embedded_programming/assignment_2/Embedded_Systems_Assignment_2/hardware_files/temp_xsdb_launch_script.tcl
+10:05:19 ERROR : (XSDB Server)package require hsi FAILED:
+invalid command name "hsi::create_dt_node"
+    while executing
+"hsi::create_dt_node -help"
+    (in namespace eval "::hsi::help" script line 6)
+    invoked from within
+"namespace eval ::hsi::help {
+    variable version 0.1
+
+    ::xsdb::setcmdmeta {hsi create_dt_node} categories {hsi}
+    ::xsdb::setcmdmeta {hsi create..."
+    (file "/tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl" line 25)
+    invoked from within
+"source /tools/Xilinx/Vitis/2020.2/scripts/xsct/hsi/hsihelp.tcl"
+    ("package ifneeded hsi::help 0.1" script)
+10:08:16 ERROR : Timed out. 180 seconds have elapsed while waiting for XSCT server to launch.
+10:08:16 ERROR : Failed to query RDI_DATADIR
+Reason: xsct server communication channel is not established.
+10:08:16 ERROR : Exception raised in executing the command =Failed to query RDI_DATADIR
+Reason: xsct server communication channel is not established. 
