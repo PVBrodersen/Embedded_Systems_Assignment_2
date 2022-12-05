@@ -49,17 +49,17 @@
 #include <stdlib.h>
 #include "platform.h"
 #include "xil_printf.h"
-#include<unistd.h>
+#include <unistd.h>
 
 #include "xbram.h"
 #include "xkalmanfilterkernel.h"
 
 #include "data.h"
 
-#define N_SAMPLES 300
-#define N_MEAS_VARS 3
-#define N_CTRL_VARS 3
-#define N_STATE_VARS 6
+#define N_SAMPLES 300	//number of data samples
+#define N_MEAS_VARS 3	//measurement inputs
+#define N_CTRL_VARS 3	//control inputs
+#define N_STATE_VARS 6	//total state variables
 
 #define BRAM0(A) ((volatile u32*)px_config0->MemBaseAddress)[A]
 #define BRAM1(A) ((volatile u32*)px_config1->MemBaseAddress)[A]
@@ -73,14 +73,18 @@ XBram_Config *px_config1;
 XKalmanfilterkernel kf_kernel;
 XKalmanfilterkernel_Config *kf_config;
 
+//Kalman filter tuning variables
 float q = 0.05;
 float r = 0.95;
 
 int main()
 {
+	//char ponter to buffer base adress;
 	char* buffer;
+
     init_platform();
 
+	//setting up the Kalmanfilter
     px_config0 = XBram_LookupConfig(XPAR_BRAM_0_DEVICE_ID);
     int x_status = XBram_CfgInitialize(&x_bram0, px_config0, px_config0->CtrlBaseAddress);
 
@@ -91,69 +95,52 @@ int main()
 	x_status = XKalmanfilterkernel_CfgInitialize(&kf_kernel, kf_config);
 	x_status = XKalmanfilterkernel_Initialize(&kf_kernel, XPAR_KALMANFILTERKERNEL_0_DEVICE_ID);
 
-
-
-
+	//Initialize tuning variables
 	XKalmanfilterkernel_Set_q(&kf_kernel, q);
 	XKalmanfilterkernel_Set_r(&kf_kernel, r);
 
-
-	// Put code to start kernel and wait for finish here
+	//Loop over N_SAMPLES iterations
 	for(int i=0;i<N_SAMPLES;i++)
 	{
-		sleep(0.1);
-		//read data and fill it into the BRAM
+		//read data from data.h and fill it into BRAM0
 		for (int j = 0; j < 6; j++) {
 			BRAM0(j) = *(u32 *)(&(din[j+i*6]));
 		}
-
-
-
+		while(XKalmanfilterkernel_IsIdle(&kf_kernel))
+		{
+			//wait for Kalmanfilter to be idle
+		}
 		XKalmanfilterkernel_Start(&kf_kernel);
-		while(!XKalmanfilterkernel_IsDone(&kf_kernel)){
-			//wait
-			xil_printf("Waiting \n");
+
+		while(!XKalmanfilterkernel_IsDone(&kf_kernel))
+		{
+			//wait for the Kalmanfilter to finish
 		}
 
+		//allocate buffer in heap
 		buffer = (char*)malloc(100*sizeof(char));
+		//read data from BRAM1 and store it in buffer
 		for (int j = 0; j < 6; j++)
 		{
 			u32 val = BRAM1(j);
 			if (j == 0) sprintf(buffer, "%f", *(float *)(&(val)));
 			else sprintf(buffer, "%s, %f", buffer, *(float *)(&(val)));
 		}
-
-				sprintf(buffer, "%s\n", buffer);
-
-
-				xil_printf(buffer);
-				free(buffer);
-	}
-
-
-	// -----------------------------------------------------
-
-	/*xil_printf("Finished\n");
-
-	for (int i = 0; i < N_SAMPLES; i++) {
-
-		char buffer[100];
-
-		for (int j = 0; j < 6; j++) {
-			u32 val = BRAM1(i*6+j);
-			if (j == 0) sprintf(buffer, "%f", *(float *)(&(val));
-			else sprintf(buffer, "%s, %f", buffer, *(float *)(&(val));
-		}
-
+		//add newline command to string
 		sprintf(buffer, "%s\n", buffer);
-		*/
-
-		//xil_printf(fbuffer);
+		//print buffer to serial terminal
+		xil_printf(buffer);
+		//free allocated memory
+		free(buffer);
+		//simulate waiting time in between readings
+		sleep(0.1);
+	}
 
 
     cleanup_platform();
     return 0;
 }
+
 
 
 
